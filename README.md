@@ -134,22 +134,22 @@ export async function renderLiquidRoute({
 
 ### 4. Copy all the following proxy-aware Hydrogen account routes
 
-- [account._index.tsx](app/routes/account_index.tsx): Proxies the `/account` route 
+- [account._index.tsx](https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/account._index.tsx): Proxies the `/account` route 
 and requests to register new accounts
-- [account.activate.$id.$token.tsx](app/routes/account.activate.$id.$token.tsx): Proxies
+- [account.activate.$id.$token.tsx](https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/account.activate.%24id.%24token.tsx): Proxies
 the account activate form route
-- [account.activate.tsx](app/routes/account.activate.tsx): Proxies the account activate form
+- [account.activate.tsx](https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/account.activate.tsx): Proxies the account activate form
 submissions and authenticates the user in Hydrogen
-- [account.addresses.$id.tsx](app/routes/account.addresses.$id.tsx): Proxies liquid address
+- [account.addresses.$id.tsx](https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/account.addresses.%24id.tsx): Proxies liquid address
 Delete and Update form POST requests
-- [account.addresses.tsx](app/routes/account.addresses.tsx): Proxies the `/account/addresses`
+- [account.addresses.tsx](https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/account.addresses.tsx): Proxies the `/account/addresses`
 route as well as POST requests to `Add` new account addresses
-- [account.login.tsx](app/routes/account.login.tsx): Proxies the `/account/login` form as
+- [account.login.tsx](https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/account.login.tsx): Proxies the `/account/login` form as
 well as login POST requests
-- [account.logout.tsx](app/routes/account.logout.tsx): Proxies `/account/logout` requests
-- [account.orders.$id.tsx](app/routes/account.orders.$id.tsx): Proxies the `/account/orders/:id` 
+- [account.logout.tsx](https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/account.logout.tsx): Proxies `/account/logout` requests
+- [account.orders.$id.tsx](https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/account.orders.%24id.tsx): Proxies the `/account/orders/:id` 
 route
-- [account.recover.tsx](app/routes/account.recover.tsx): Proxies the POST requests for
+- [account.recover.tsx](https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/account.recover.tsx): Proxies the POST requests for
 resetting account passwords
-- [account.register.tsx](app/routes/account.register.tsx): Proxies the `/account/register`
+- [account.register.tsx](https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/account.register.tsx): Proxies the `/account/register`
 route (POST requests are handled by the `/account` route)
