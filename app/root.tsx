@@ -1,4 +1,5 @@
 import {useNonce, getShopAnalytics, Analytics} from '@shopify/hydrogen';
+import type {CustomerAccessToken} from '@shopify/hydrogen/storefront-api-types';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {
   Links,
@@ -61,7 +62,7 @@ export async function loader(args: LoaderFunctionArgs) {
   const deferredData = loadDeferredData(args);
 
   // Await the critical data required to render initial state of the page
-  const criticalData = await loadCriticalData(args);
+  const {headers, ...criticalData} = await loadCriticalData(args);
 
   const {storefront, env} = args.context;
 
@@ -80,9 +81,7 @@ export async function loader(args: LoaderFunctionArgs) {
       },
     },
     {
-      headers: {
-        'Set-Cookie': await args.context.session.commit(),
-      },
+      headers,
     },
   );
 }
@@ -92,21 +91,22 @@ export async function loader(args: LoaderFunctionArgs) {
  * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  */
 async function loadCriticalData({context}: LoaderFunctionArgs) {
-  const {storefront} = context;
+  const {storefront, session} = context;
 
-  const [header] = await Promise.all([
+  const customerAccessToken = session.get('customerAccessToken');
+
+  const [header, {isLoggedIn, headers}] = await Promise.all([
     storefront.query(HEADER_QUERY, {
       cache: storefront.CacheLong(),
       variables: {
         headerMenuHandle: 'main-menu', // Adjust to your header menu handle
       },
     }),
+    validateCustomerAccessToken(session, customerAccessToken),
     // Add other queries here, so that they are loaded in parallel
   ]);
 
-  return {
-    header,
-  };
+  return {header, isLoggedIn, headers};
 }
 
 /**
@@ -115,7 +115,7 @@ async function loadCriticalData({context}: LoaderFunctionArgs) {
  * Make sure to not throw any errors here, as it will cause the page to 500.
  */
 function loadDeferredData({context}: LoaderFunctionArgs) {
-  const {storefront, customerAccount, cart} = context;
+  const {storefront, cart} = context;
 
   // defer the footer query (below the fold)
   const footer = storefront
@@ -132,9 +132,44 @@ function loadDeferredData({context}: LoaderFunctionArgs) {
     });
   return {
     cart: cart.get(),
-    isLoggedIn: customerAccount.isLoggedIn(),
     footer,
   };
+}
+
+/**
+ * Validates the customer access token and returns a boolean and headers
+ * @see https://shopify.dev/docs/api/storefront/latest/objects/CustomerAccessToken
+ *
+ * @example
+ * ```js
+ * const {isLoggedIn, headers} = await validateCustomerAccessToken(
+ *  customerAccessToken,
+ *  session,
+ * );
+ * ```
+ */
+async function validateCustomerAccessToken(
+  session: LoaderFunctionArgs['context']['session'],
+  customerAccessToken?: CustomerAccessToken,
+) {
+  let isLoggedIn = false;
+  const headers = new Headers();
+  if (!customerAccessToken?.accessToken || !customerAccessToken?.expiresAt) {
+    return {isLoggedIn, headers};
+  }
+
+  const expiresAt = new Date(customerAccessToken.expiresAt).getTime();
+  const dateNow = Date.now();
+  const customerAccessTokenExpired = expiresAt < dateNow;
+
+  if (customerAccessTokenExpired) {
+    session.unset('customerAccessToken');
+    headers.append('Set-Cookie', await session.commit());
+  } else {
+    isLoggedIn = true;
+  }
+
+  return {isLoggedIn, headers};
 }
 
 function Layout({children}: {children?: React.ReactNode}) {
