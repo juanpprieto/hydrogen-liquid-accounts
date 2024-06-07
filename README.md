@@ -1,7 +1,7 @@
 # Hydrogen: Liquid Accounts
 
 > [!WARNING]  
-> This example won't work in development mode because liquid forms (login, register...) include a captcha that checks for domain inconsistencies on submition. It should work ok once the hydrogen project is deployed to Oxygen.
+> This example won't work in development mode because liquid forms (login, register...) include a captcha that checks for domain inconsistencies on submition. It should work ok once the hydrogen project is deployed to Oxygen. In special cases, a `bypass_customer_filter` flag could be set in a staging store to allow this to work on dev.
 
 [Check out Hydrogen docs](https://shopify.dev/custom-storefronts/hydrogen)
 [Get familiar with Remix](https://remix.run/docs/en/v1)
