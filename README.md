@@ -150,7 +150,7 @@ export async function renderLiquidRoute({
 
 ### 4. Copy all the following proxy-aware Hydrogen account routes
 
-- [$.tsx]((https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/$.tsx): Proxy all requests that were not matched in Remix to liquid
+- [$.tsx](https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/$.tsx): Proxy all requests that were not matched in Remix to liquid
 - [account._index.tsx](https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/account._index.tsx): Proxies the `/account` route 
 and requests to register new accounts
 - [account.activate.$id.$token.tsx](https://github.com/juanpprieto/hydrogen-liquid-accounts/blob/main/app/routes/account.activate.%24id.%24token.tsx): Proxies
