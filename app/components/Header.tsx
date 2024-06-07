@@ -97,6 +97,14 @@ export function HeaderMenu({
   );
 }
 
+function LiquidAccountToggle({isLoggedIn}: {isLoggedIn: boolean}) {
+  return isLoggedIn ? (
+    <a href="/account">Account</a>
+  ) : (
+    <a href="/account/login">Sign in</a>
+  );
+}
+
 function HeaderCtas({
   isLoggedIn,
   cart,
@@ -104,13 +112,11 @@ function HeaderCtas({
   return (
     <nav className="header-ctas" role="navigation">
       <HeaderMenuMobileToggle />
-      <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
-        <Suspense fallback="Sign in">
-          <Await resolve={isLoggedIn} errorElement="Sign in">
-            {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
-          </Await>
-        </Suspense>
-      </NavLink>
+      <Suspense fallback={<a href="/account/login">Sign In</a>}>
+        <Await resolve={isLoggedIn} errorElement="Sign in">
+          {(isLoggedIn) => <LiquidAccountToggle isLoggedIn={isLoggedIn} />}
+        </Await>
+      </Suspense>
       <SearchToggle />
       <CartToggle cart={cart} />
     </nav>
