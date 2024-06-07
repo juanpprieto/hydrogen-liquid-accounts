@@ -17,8 +17,7 @@ export async function renderLiquidRoute({
   const absoluteUrl = `${pathname}${search}`;
 
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set('Accept-Encoding', 'gzip');
-
+  requestHeaders.set('Accept-Encoding', `gzip`);
   requestHeaders.append(
     'X-Shopify-Client-IP',
     request.headers.get('X-Shopify-Client-IP') || '',
@@ -30,11 +29,18 @@ export async function renderLiquidRoute({
   requestHeaders.append('User-Agent', 'Hydrogen');
 
   try {
+    // Fetch the HTML response from the Liquid store
     const response = await fetch(liquidUrl, {
       headers: requestHeaders,
     });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch ${liquidUrl}: ${response.statusText}`);
+    }
+
     const data = await response.text();
 
+    // Regular expressions to match and replace HTML elements
     const metaRegex = `/<meta.*name="robots".*content="noindex.*".*>`;
     const linkRegex = `/<link.*rel="canonical".*href=".*".*>`;
     const monorailRegex = `/"monorailRegion":"shop_domain"/`;
@@ -44,8 +50,10 @@ export async function renderLiquidRoute({
       'gi',
     );
 
+    // Regular expression to match and replace liquid URLs with absolute URLs
     const liquidUrlRegex = new RegExp(liquidUrl, 'g');
 
+    // Modify the HTML response
     const html = data
       .replace(replaceRegex, (match) => {
         if (match.startsWith('<meta') && config.removeNoIndex) return '';
@@ -63,12 +71,18 @@ export async function renderLiquidRoute({
       ? 404
       : response.status;
 
+    const responseHeaders = new Headers(response.headers);
+
+    responseHeaders.set('content-type', 'text/html');
+    responseHeaders.delete('content-encoding');
+
     return new Response(html, {
       status,
-      headers: response.headers,
+      headers: responseHeaders,
     });
   } catch (error) {
     if (error instanceof TypeError) {
+      console.error('Error proxying route', liquidUrl, error);
       return new Response(error.message, {status: 404});
     }
     return new Response(JSON.stringify(error), {status: 500});
