@@ -1,7 +1,7 @@
 # Hydrogen: Liquid Accounts
 
-This example demonstrates a solid path for incrementally adopting Hydrogen account 
-flows in Hydrogen by proxying liquid account flows, routes and mutations via Hydrogen.
+> [!WARNING]  
+> This example won't work in development mode because liquid forms (login, register...) include a captcha that checks for domain inconsistencies on submition. It should work ok once the hydrogen project is deployed to Oxygen.
 
 [Check out Hydrogen docs](https://shopify.dev/custom-storefronts/hydrogen)
 [Get familiar with Remix](https://remix.run/docs/en/v1)
