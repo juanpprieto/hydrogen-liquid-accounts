@@ -6,6 +6,8 @@ flows in Hydrogen by proxying liquid account flows, routes and mutations via Hyd
 [Check out Hydrogen docs](https://shopify.dev/custom-storefronts/hydrogen)
 [Get familiar with Remix](https://remix.run/docs/en/v1)
 
+https://github.com/juanpprieto/hydrogen-liquid-accounts/assets/12080141/118760cd-a66e-4bdf-baae-4dd42b6407ec
+
 ## Requirements
 
 - A liquid storefront with a standard Shopify /account flow. eg /account/login...
